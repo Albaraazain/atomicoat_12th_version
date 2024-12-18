@@ -1,0 +1,18 @@
+{
+    "sourceFile": "README.md",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1734535519311,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1734535519311,
+            "name": "Commit-0",
+            "content": "# atomicoat_12th_version\r\n\r\nA new Flutter project.\r\n\r\n## Getting Started\r\n\r\nThis project is a starting point for a Flutter application.\r\n\r\nA few resources to get you started if this is your first Flutter project:\r\n\r\n- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)\r\n- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)\r\n\r\nFor help getting started with Flutter development, view the\r\n[online documentation](https://docs.flutter.dev/), which offers tutorials,\r\nsamples, guidance on mobile development, and a full API reference.\r\n"
+        }
+    ]
+}

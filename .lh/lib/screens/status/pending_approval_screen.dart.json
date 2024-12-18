@@ -1,0 +1,18 @@
+{
+    "sourceFile": "lib/screens/status/pending_approval_screen.dart",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1734531736669,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1734531736669,
+            "name": "Commit-0",
+            "content": "import 'package:flutter/material.dart';\r\nimport 'package:provider/provider.dart';\r\nimport 'package:experiment_planner/providers/auth_provider.dart';\r\n\r\nclass PendingApprovalScreen extends StatelessWidget {\r\n  const PendingApprovalScreen({Key? key}) : super(key: key);\r\n\r\n  @override\r\n  Widget build(BuildContext context) {\r\n    return Scaffold(\r\n      body: Center(\r\n        child: Column(\r\n          mainAxisAlignment: MainAxisAlignment.center,\r\n          children: [\r\n            Icon(Icons.hourglass_empty, size: 64, color: Colors.orange),\r\n            SizedBox(height: 16),\r\n            Text(\r\n              'Your account is pending approval',\r\n              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),\r\n            ),\r\n            SizedBox(height: 16),\r\n            Text(\r\n              'Please wait for an administrator to approve your account.',\r\n              textAlign: TextAlign.center,\r\n            ),\r\n            SizedBox(height: 24),\r\n            ElevatedButton(\r\n              onPressed: () async {\r\n                await Provider.of<AuthProvider>(context, listen: false).signOut();\r\n              },\r\n              child: Text('Logout'),\r\n            ),\r\n          ],\r\n        ),\r\n      ),\r\n    );\r\n  }\r\n}"
+        }
+    ]
+}

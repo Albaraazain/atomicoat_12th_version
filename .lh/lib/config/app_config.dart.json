@@ -1,0 +1,18 @@
+{
+    "sourceFile": "lib/config/app_config.dart",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1734531642336,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1734531642336,
+            "name": "Commit-0",
+            "content": "import 'package:flutter/material.dart';\r\nimport 'package:firebase_core/firebase_core.dart';\r\nimport 'package:provider/provider.dart';\r\nimport 'package:experiment_planner/config/provider_config.dart';\r\nimport 'package:experiment_planner/config/theme_config.dart';\r\nimport 'package:experiment_planner/config/route_config.dart';\r\nimport 'package:experiment_planner/services/navigation_service.dart';\r\n\r\nclass AppConfig {\r\n  static Future<void> initializeApp() async {\r\n    WidgetsFlutterBinding.ensureInitialized();\r\n\r\n    try {\r\n      await Firebase.initializeApp();\r\n      print('Firebase initialized successfully');\r\n    } catch (e) {\r\n      print('Failed to initialize Firebase: $e');\r\n    }\r\n  }\r\n\r\n  static Widget buildApp(NavigationService navigationService) {\r\n    return MultiProvider(\r\n      providers: ProviderConfig.providers,\r\n      child: Builder(\r\n        builder: (BuildContext context) {\r\n          return MaterialApp(\r\n            title: 'ALD Machine Maintenance',\r\n            navigatorKey: Provider.of<NavigationService>(context, listen: false)\r\n                .navigatorKey,\r\n            debugShowCheckedModeBanner: false,\r\n            theme: ThemeConfig.teslaTheme,\r\n            initialRoute: '/',\r\n            routes: RouteConfig.routes,\r\n          );\r\n        },\r\n      ),\r\n    );\r\n  }\r\n}"
+        }
+    ]
+}

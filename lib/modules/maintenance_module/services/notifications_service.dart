@@ -47,7 +47,6 @@ class NotificationsService {
             ),
           ),
         ),
-        androidAllowWhileIdle: true,
         uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
         matchDateTimeComponents: DateTimeComponents.time,
         androidScheduleMode: AndroidScheduleMode.exact
@@ -68,7 +67,6 @@ class NotificationsService {
             priority: Priority.high,
           ),
         ),
-        androidAllowWhileIdle: true,
         uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
         androidScheduleMode: AndroidScheduleMode.exact
     );

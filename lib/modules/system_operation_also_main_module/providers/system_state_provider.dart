@@ -1,25 +1,28 @@
 // lib/providers/system_state_provider.dart
 
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:experiment_planner/features/alarm/bloc/alarm_bloc.dart';
+import 'package:experiment_planner/features/alarm/bloc/alarm_event.dart';
+import 'package:experiment_planner/features/alarm/bloc/alarm_state.dart';
 import 'package:experiment_planner/modules/system_operation_also_main_module/providers/system_copmonent_provider.dart';
 import 'package:flutter/foundation.dart';
 import '../../../repositories/system_state_repository.dart';
 import '../../../services/auth_service.dart';
 import '../models/data_point.dart';
 import '../models/recipe.dart';
-import '../models/alarm.dart';
+import '../../../features/alarm/models/alarm.dart';
 import '../models/system_component.dart';
 import '../models/system_log_entry.dart';
 import '../models/safety_error.dart';
 import '../services/ald_system_simulation_service.dart';
 import 'recipe_provider.dart';
-import 'alarm_provider.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SystemStateProvider with ChangeNotifier {
   final SystemStateRepository _systemStateRepository;
   final AuthService _authService;
   final SystemComponentProvider _componentProvider;
+  final AlarmBloc _alarmBloc;  // Changed from AlarmProvider
   Recipe? _activeRecipe;
   int _currentRecipeStepIndex = 0;
   Recipe? _selectedRecipe;
@@ -27,7 +30,6 @@ class SystemStateProvider with ChangeNotifier {
   final List<SystemLogEntry> _systemLog = [];
   late AldSystemSimulationService _simulationService;
   late RecipeProvider _recipeProvider;
-  late AlarmProvider _alarmProvider;
   Timer? _stateUpdateTimer;
 
   // Add a constant for the maximum number of log entries to keep
@@ -39,7 +41,7 @@ class SystemStateProvider with ChangeNotifier {
   SystemStateProvider(
     this._componentProvider,
     this._recipeProvider,
-    this._alarmProvider,
+    this._alarmBloc,  // Changed from AlarmProvider to AlarmBloc
     this._systemStateRepository,
     this._authService,
   ) {
@@ -54,7 +56,10 @@ class SystemStateProvider with ChangeNotifier {
   Recipe? get selectedRecipe => _selectedRecipe;
   bool get isSystemRunning => _isSystemRunning;
   List<SystemLogEntry> get systemLog => List.unmodifiable(_systemLog);
-  List<Alarm> get activeAlarms => _alarmProvider.activeAlarms;
+  List<Alarm> get activeAlarms {
+    final state = _alarmBloc.state;
+    return state is AlarmLoadSuccess ? state.activeAlarms : [];
+  }
 
   get components => _componentProvider.components;
 
@@ -550,12 +555,7 @@ class SystemStateProvider with ChangeNotifier {
       addLogEntry('System started', ComponentStatus.normal);
       notifyListeners();
     } else {
-      _alarmProvider.addAlarm(Alarm(
-        id: DateTime.now().millisecondsSinceEpoch.toString(),
-        message: 'System not ready to start. Check system readiness.',
-        severity: AlarmSeverity.warning,
-        timestamp: DateTime.now(),
-      ));
+      addAlarm('System not ready to start. Check system readiness.', AlarmSeverity.warning);
     }
   }
 
@@ -656,12 +656,9 @@ class SystemStateProvider with ChangeNotifier {
 
   // Update providers if needed
   void updateProviders(
-      RecipeProvider recipeProvider, AlarmProvider alarmProvider) {
+      RecipeProvider recipeProvider) {
     if (_recipeProvider != recipeProvider) {
       _recipeProvider = recipeProvider;
-    }
-    if (_alarmProvider != alarmProvider) {
-      _alarmProvider = alarmProvider;
     }
     notifyListeners();
   }
@@ -684,12 +681,7 @@ class SystemStateProvider with ChangeNotifier {
       await _executeSteps(recipe.steps);
       completeRecipe();
     } else {
-      _alarmProvider.addAlarm(Alarm(
-        id: DateTime.now().millisecondsSinceEpoch.toString(),
-        message: 'System not ready to start',
-        severity: AlarmSeverity.warning,
-        timestamp: DateTime.now(),
-      ));
+      addAlarm('System not ready to start', AlarmSeverity.warning);
     }
   }
 
@@ -700,32 +692,32 @@ class SystemStateProvider with ChangeNotifier {
       addLogEntry(
           'Recipe selected: ${_selectedRecipe!.name}', ComponentStatus.normal);
     } else {
-      _alarmProvider.addAlarm(Alarm(
-        id: DateTime.now().millisecondsSinceEpoch.toString(),
-        message: 'Failed to select recipe: Recipe not found',
-        severity: AlarmSeverity.warning,
-        timestamp: DateTime.now(),
-      ));
+      addAlarm('Failed to select recipe: Recipe not found', AlarmSeverity.warning);
     }
     notifyListeners();
   }
 
   // Emergency stop
   void emergencyStop() {
+    String? userId = _authService.currentUserId;
+    if (userId == null) return;
+
     stopSystem();
     for (var component in _componentProvider.components.values) {
       if (component.isActivated) {
         _componentProvider.deactivateComponent(component.name);
-        _systemStateRepository.saveComponentState(
-            _authService.currentUser!.uid, component);
+        _systemStateRepository.saveComponentState(userId, component);
       }
     }
-    _alarmProvider.addAlarm(Alarm(
+
+    final alarm = Alarm(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
       message: 'Emergency stop activated',
       severity: AlarmSeverity.critical,
       timestamp: DateTime.now(),
-    ));
+    );
+
+    _alarmBloc.add(AddAlarmEvent(alarm, userId));
     addLogEntry('Emergency stop activated', ComponentStatus.error);
     notifyListeners();
   }
@@ -780,12 +772,17 @@ class SystemStateProvider with ChangeNotifier {
 
   // Trigger safety alert
   void triggerSafetyAlert(SafetyError error) {
-    _alarmProvider.addAlarm(Alarm(
+    String? userId = _authService.currentUserId;
+    if (userId == null) return;
+
+    final alarm = Alarm(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
       message: error.description,
       severity: _mapSeverityToAlarmSeverity(error.severity),
       timestamp: DateTime.now(),
-    ));
+    );
+
+    _alarmBloc.add(AddAlarmEvent(alarm, userId));
     addLogEntry('Safety Alert: ${error.description}',
         _mapSeverityToComponentStatus(error.severity));
   }
@@ -1003,7 +1000,10 @@ class SystemStateProvider with ChangeNotifier {
   }
 
   // Add an alarm
-  void addAlarm(String message, AlarmSeverity severity) async {
+  void addAlarm(String message, AlarmSeverity severity) {
+    String? userId = _authService.currentUserId;
+    if (userId == null) return;
+
     final newAlarm = Alarm(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
       message: message,
@@ -1011,41 +1011,38 @@ class SystemStateProvider with ChangeNotifier {
       timestamp: DateTime.now(),
     );
 
-    await _alarmProvider.addAlarm(newAlarm);
-
-    // Log the alarm creation
+    _alarmBloc.add(AddAlarmEvent(newAlarm, userId));
     addLogEntry('New alarm: ${newAlarm.message}', ComponentStatus.warning);
-
     notifyListeners();
   }
 
   // Acknowledge an alarm
-  void acknowledgeAlarm(String alarmId) async {
-    await _alarmProvider.acknowledgeAlarm(alarmId);
+  void acknowledgeAlarm(String alarmId) {
+    String? userId = _authService.currentUserId;
+    if (userId == null) return;
 
-    // Log the alarm acknowledgement
+    _alarmBloc.add(AcknowledgeAlarmEvent(alarmId, userId));
     addLogEntry('Alarm acknowledged: $alarmId', ComponentStatus.normal);
-
     notifyListeners();
   }
 
   // Clear an alarm
-  void clearAlarm(String alarmId) async {
-    await _alarmProvider.clearAlarm(alarmId);
+  void clearAlarm(String alarmId) {
+    String? userId = _authService.currentUserId;
+    if (userId == null) return;
 
-    // Log the alarm clearance
+    _alarmBloc.add(ClearAlarmEvent(alarmId, userId));
     addLogEntry('Alarm cleared: $alarmId', ComponentStatus.normal);
-
     notifyListeners();
   }
 
   // Clear all acknowledged alarms
-  void clearAllAcknowledgedAlarms() async {
-    await _alarmProvider.clearAllAcknowledgedAlarms();
+  void clearAllAcknowledgedAlarms() {
+    String? userId = _authService.currentUserId;
+    if (userId == null) return;
 
-    // Log the action
+    _alarmBloc.add(ClearAllAcknowledgedAlarmsEvent(userId));
     addLogEntry('All acknowledged alarms cleared', ComponentStatus.normal);
-
     notifyListeners();
   }
 

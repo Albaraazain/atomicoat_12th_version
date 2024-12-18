@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:math';
-import 'package:experiment_planner/modules/system_operation_also_main_module/models/alarm.dart';
+import 'package:experiment_planner/features/alarm/models/alarm.dart';
 import '../providers/system_state_provider.dart';
 
 class AldSystemSimulationService {

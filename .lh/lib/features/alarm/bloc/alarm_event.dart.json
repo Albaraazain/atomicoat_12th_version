@@ -1,0 +1,26 @@
+{
+    "sourceFile": "lib/features/alarm/bloc/alarm_event.dart",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 2,
+            "patches": [
+                {
+                    "date": 1734533984629,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1734534124546,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,38 +1,38 @@\n import 'package:equatable/equatable.dart';\r\n-import '../models/alarm.dart';\r\n+import '../../models/alarm.dart';\r\n \r\n-abstract class AlarmEvent extends Equatable {\r\n+sealed class AlarmEvent extends Equatable {\r\n   const AlarmEvent();\r\n \r\n   @override\r\n   List<Object?> get props => [];\r\n }\r\n \r\n-class LoadAlarms extends AlarmEvent {\r\n+class LoadAlarmsEvent extends AlarmEvent {\r\n   final String userId;\r\n-  const LoadAlarms(this.userId);\r\n+  const LoadAlarmsEvent(this.userId);\r\n \r\n   @override\r\n   List<Object?> get props => [userId];\r\n }\r\n \r\n-class AddAlarm extends AlarmEvent {\r\n+class AddAlarmEvent extends AlarmEvent {\r\n   final Alarm alarm;\r\n   final String userId;\r\n-  const AddAlarm(this.alarm, this.userId);\r\n+  const AddAlarmEvent(this.alarm, this.userId);\r\n \r\n   @override\r\n   List<Object?> get props => [alarm, userId];\r\n }\r\n \r\n-class AddSafetyAlarm extends AlarmEvent {\r\n+class AddSafetyAlarmEvent extends AlarmEvent {\r\n   final String id;\r\n   final String message;\r\n   final AlarmSeverity severity;\r\n   final String userId;\r\n \r\n-  const AddSafetyAlarm({\r\n+  const AddSafetyAlarmEvent({\r\n     required this.id,\r\n     required this.message,\r\n     required this.severity,\r\n     required this.userId,\r\n@@ -41,29 +41,29 @@\n   @override\r\n   List<Object?> get props => [id, message, severity, userId];\r\n }\r\n \r\n-class AcknowledgeAlarm extends AlarmEvent {\r\n+class AcknowledgeAlarmEvent extends AlarmEvent {\r\n   final String alarmId;\r\n   final String userId;\r\n-  const AcknowledgeAlarm(this.alarmId, this.userId);\r\n+  const AcknowledgeAlarmEvent(this.alarmId, this.userId);\r\n \r\n   @override\r\n   List<Object?> get props => [alarmId, userId];\r\n }\r\n \r\n-class ClearAlarm extends AlarmEvent {\r\n+class ClearAlarmEvent extends AlarmEvent {\r\n   final String alarmId;\r\n   final String userId;\r\n-  const ClearAlarm(this.alarmId, this.userId);\r\n+  const ClearAlarmEvent(this.alarmId, this.userId);\r\n \r\n   @override\r\n   List<Object?> get props => [alarmId, userId];\r\n }\r\n \r\n-class ClearAcknowledgedAlarms extends AlarmEvent {\r\n+class ClearAllAcknowledgedAlarmsEvent extends AlarmEvent {\r\n   final String userId;\r\n-  const ClearAcknowledgedAlarms(this.userId);\r\n+  const ClearAllAcknowledgedAlarmsEvent(this.userId);\r\n \r\n   @override\r\n   List<Object?> get props => [userId];\r\n }\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1734535251461,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,6 @@\n import 'package:equatable/equatable.dart';\r\n-import '../../models/alarm.dart';\r\n+import 'package:experiment_planner/features/alarm/models/alarm.dart';\r\n \r\n sealed class AlarmEvent extends Equatable {\r\n   const AlarmEvent();\r\n \r\n"
+                }
+            ],
+            "date": 1734533984629,
+            "name": "Commit-0",
+            "content": "import 'package:equatable/equatable.dart';\r\nimport '../models/alarm.dart';\r\n\r\nabstract class AlarmEvent extends Equatable {\r\n  const AlarmEvent();\r\n\r\n  @override\r\n  List<Object?> get props => [];\r\n}\r\n\r\nclass LoadAlarms extends AlarmEvent {\r\n  final String userId;\r\n  const LoadAlarms(this.userId);\r\n\r\n  @override\r\n  List<Object?> get props => [userId];\r\n}\r\n\r\nclass AddAlarm extends AlarmEvent {\r\n  final Alarm alarm;\r\n  final String userId;\r\n  const AddAlarm(this.alarm, this.userId);\r\n\r\n  @override\r\n  List<Object?> get props => [alarm, userId];\r\n}\r\n\r\nclass AddSafetyAlarm extends AlarmEvent {\r\n  final String id;\r\n  final String message;\r\n  final AlarmSeverity severity;\r\n  final String userId;\r\n\r\n  const AddSafetyAlarm({\r\n    required this.id,\r\n    required this.message,\r\n    required this.severity,\r\n    required this.userId,\r\n  });\r\n\r\n  @override\r\n  List<Object?> get props => [id, message, severity, userId];\r\n}\r\n\r\nclass AcknowledgeAlarm extends AlarmEvent {\r\n  final String alarmId;\r\n  final String userId;\r\n  const AcknowledgeAlarm(this.alarmId, this.userId);\r\n\r\n  @override\r\n  List<Object?> get props => [alarmId, userId];\r\n}\r\n\r\nclass ClearAlarm extends AlarmEvent {\r\n  final String alarmId;\r\n  final String userId;\r\n  const ClearAlarm(this.alarmId, this.userId);\r\n\r\n  @override\r\n  List<Object?> get props => [alarmId, userId];\r\n}\r\n\r\nclass ClearAcknowledgedAlarms extends AlarmEvent {\r\n  final String userId;\r\n  const ClearAcknowledgedAlarms(this.userId);\r\n\r\n  @override\r\n  List<Object?> get props => [userId];\r\n}"
+        }
+    ]
+}

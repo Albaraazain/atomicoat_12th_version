@@ -1,56 +1,63 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../providers/alarm_provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:experiment_planner/features/alarm/bloc/alarm_bloc.dart';
+import 'package:experiment_planner/features/alarm/bloc/alarm_state.dart';
+import '../../../features/alarm/models/alarm.dart';
 
 class AlarmIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Consumer<AlarmProvider>(
-      builder: (context, provider, child) {
-        if (!provider.hasActiveAlarms) {
-          return SizedBox.shrink();
-        }
-
-        return GestureDetector(
-          onTap: () => _showAlarmDetails(context, provider),
-          child: Container(
-            padding: EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: provider.hasCriticalAlarm ? Colors.red : Colors.orange,
-              borderRadius: BorderRadius.circular(8),
-            ),
+    return BlocBuilder<AlarmBloc, AlarmState>(
+      builder: (context, state) {
+        if (state is AlarmLoadSuccess) {
+          return GestureDetector(
+            onTap: () => _showAlarmDetails(context, state),
             child: Row(
-              mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(Icons.warning, color: Colors.white),
+                Icon(
+                  state.hasCriticalAlarm
+                      ? Icons.error_outline
+                      : state.hasActiveAlarms
+                          ? Icons.warning_amber_rounded
+                          : Icons.check_circle_outline,
+                  color: state.hasCriticalAlarm
+                      ? Colors.red
+                      : state.hasActiveAlarms
+                          ? Colors.orange
+                          : Colors.green,
+                  size: 16,
+                ),
                 SizedBox(width: 8),
                 Text(
-                  '${provider.activeAlarms.length} Alarm${provider.activeAlarms.length > 1 ? 's' : ''}',
-                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                  '${state.activeAlarms.length} Active Alarm${state.activeAlarms.length != 1 ? 's' : ''}',
+                  style: TextStyle(
+                    color: state.hasCriticalAlarm
+                        ? Colors.red
+                        : state.hasActiveAlarms
+                            ? Colors.orange
+                            : Colors.green,
+                  ),
                 ),
               ],
             ),
-          ),
-        );
+          );
+        }
+        return SizedBox.shrink(); // Return empty widget if state is not loaded
       },
     );
   }
 
-
-  void _showAlarmDetails(BuildContext context, AlarmProvider provider) {
+  void _showAlarmDetails(BuildContext context, AlarmLoadSuccess state) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Active Alarms'),
           content: SingleChildScrollView(
-            child: ListBody(
-              children: provider.activeAlarms.map((alarm) =>
-                  Padding(
-                    padding: EdgeInsets.only(bottom: 8),
-                    child: Text('${alarm.severity.toString().split('.').last}: ${alarm.message}'),
-                  )
-              ).toList(),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: state.activeAlarms.map((alarm) => _buildAlarmItem(alarm)).toList(),
             ),
           ),
           actions: [
@@ -66,4 +73,26 @@ class AlarmIndicator extends StatelessWidget {
     );
   }
 
+  Widget _buildAlarmItem(Alarm alarm) {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        children: [
+          Icon(
+            alarm.severity == AlarmSeverity.critical
+                ? Icons.error_outline
+                : Icons.warning_amber_rounded,
+            color: alarm.severity == AlarmSeverity.critical
+                ? Colors.red
+                : Colors.orange,
+            size: 16,
+          ),
+          SizedBox(width: 8),
+          Expanded(
+            child: Text(alarm.message),
+          ),
+        ],
+      ),
+    );
+  }
 }

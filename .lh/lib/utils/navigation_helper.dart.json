@@ -1,0 +1,18 @@
+{
+    "sourceFile": "lib/utils/navigation_helper.dart",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1734535224080,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1734535224080,
+            "name": "Commit-0",
+            "content": "// lib/utils/navigation_helper.dart\r\n\r\nimport 'package:flutter/material.dart';\r\nimport '../enums/navigation_item.dart';\r\nimport '../screens/main_screen.dart';\r\nimport '../screens/admin_dashboard_screen.dart';\r\nimport '../modules/system_operation_also_main_module/screens/recipe_management_screen.dart';\r\nimport '../modules/maintenance_module/screens/calibration_screen.dart';\r\nimport '../modules/maintenance_module/screens/reporting_screen.dart';\r\nimport '../modules/maintenance_module/screens/troubleshooting_screen.dart';\r\nimport '../modules/maintenance_module/screens/spare_parts_screen.dart';\r\nimport '../modules/maintenance_module/screens/documentation_screen.dart';\r\nimport '../modules/maintenance_module/screens/remote_assistance_screen.dart';\r\nimport '../modules/maintenance_module/screens/safety_procedures_screen.dart';\r\nimport '../modules/maintenance_module/screens/maintenance_home_screen.dart';\r\n\r\nvoid handleNavigation(BuildContext context, NavigationItem item) {\r\n  switch (item) {\r\n    case NavigationItem.mainDashboard:\r\n      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => MainScreen()));\r\n      break;\r\n    case NavigationItem.adminDashboard:\r\n      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => AdminDashboardScreen()));\r\n      break;\r\n    case NavigationItem.recipeManagement:\r\n      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => RecipeManagementScreen()));\r\n      break;\r\n    case NavigationItem.calibration:\r\n      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => CalibrationScreen()));\r\n      break;\r\n    case NavigationItem.reporting:\r\n      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => ReportingScreen()));\r\n      break;\r\n    case NavigationItem.troubleshooting:\r\n      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => TroubleshootingScreen()));\r\n      break;\r\n    case NavigationItem.spareParts:\r\n      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => SparePartsScreen()));\r\n      break;\r\n    case NavigationItem.documentation:\r\n      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => DocumentationScreen()));\r\n      break;\r\n    case NavigationItem.remoteAssistance:\r\n      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => RemoteAssistanceScreen()));\r\n      break;\r\n    case NavigationItem.safetyProcedures:\r\n      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => SafetyProceduresScreen()));\r\n      break;\r\n    case NavigationItem.overview:\r\n      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => MaintenanceHomeScreen()));\r\n      break;\r\n    case NavigationItem.schedule:\r\n      // TODO: Implement navigation for schedule\r\n      break;\r\n    case NavigationItem.reports:\r\n      // TODO: Implement navigation for reports\r\n      break;\r\n    default:\r\n      break;\r\n  }\r\n}"
+        }
+    ]
+}

@@ -1,0 +1,18 @@
+{
+    "sourceFile": "lib/features/alarm/repository/alarm_repository.dart",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1734534294130,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1734534294130,
+            "name": "Commit-0",
+            "content": "import 'package:cloud_firestore/cloud_firestore.dart';\r\nimport '../models/alarm.dart';\r\nimport '../../../repositories/base_repository.dart';\r\n\r\nclass AlarmRepository extends BaseRepository<Alarm> {\r\n  AlarmRepository() : super('alarms');\r\n\r\n  Future<void> remove(String alarmId, {String? userId}) async {\r\n    await delete(alarmId, userId: userId);\r\n  }\r\n\r\n  Future<void> clearAcknowledged(String userId) async {\r\n    QuerySnapshot acknowledgedAlarms = await getUserCollection(userId)\r\n        .where('acknowledged', isEqualTo: true)\r\n        .get();\r\n\r\n    for (var doc in acknowledgedAlarms.docs) {\r\n      await doc.reference.delete();\r\n    }\r\n  }\r\n\r\n  Future<List<Alarm>> getActiveAlarms(String userId) async {\r\n    QuerySnapshot activeAlarms = await getUserCollection(userId)\r\n        .where('acknowledged', isEqualTo: false)\r\n        .get();\r\n\r\n    return activeAlarms.docs\r\n        .map((doc) => fromJson(doc.data() as Map<String, dynamic>))\r\n        .toList();\r\n  }\r\n\r\n  @override\r\n  Alarm fromJson(Map<String, dynamic> json) => Alarm.fromJson(json);\r\n}"
+        }
+    ]
+}

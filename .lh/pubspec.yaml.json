@@ -1,0 +1,22 @@
+{
+    "sourceFile": "pubspec.yaml",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 1,
+            "patches": [
+                {
+                    "date": 1734042401953,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1734534506592,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -5,9 +5,9 @@\n \r\n version: 1.0.0+2\r\n \r\n environment:\r\n-  sdk: \">=2.12.0 <3.0.0\"\r\n+  sdk: \">=3.0.0 <4.0.0\"\r\n \r\n dependencies:\r\n   flutter:\r\n     sdk: flutter\r\n@@ -49,8 +49,9 @@\n   firebase_admin: ^0.3.0\r\n   firebase_dart: ^1.0.11\r\n   http: ^1.2.2\r\n   firebase_auth_rest: ^2.0.6\r\n+  flutter_bloc: ^8.1.6\r\n \r\n \r\n \r\n \r\n"
+                }
+            ],
+            "date": 1734042401953,
+            "name": "Commit-0",
+            "content": "name: experiment_planner\r\ndescription: An app for planning and scheduling experiments.\r\n\r\npublish_to: 'none'\r\n\r\nversion: 1.0.0+2\r\n\r\nenvironment:\r\n  sdk: \">=2.12.0 <3.0.0\"\r\n\r\ndependencies:\r\n  flutter:\r\n    sdk: flutter\r\n  provider: ^6.0.0\r\n  shared_preferences: ^2.0.15\r\n  json_annotation: ^4.4.0\r\n  intl: ^0.19.0\r\n  uuid: ^4.5.0\r\n  flutter_local_notifications: ^18.0.1\r\n  timezone: ^0.10.0\r\n  fl_chart: ^0.69.0\r\n  google_fonts: ^6.2.1\r\n  bcrypt: ^1.1.3\r\n  table_calendar: ^3.0.8\r\n  flutter_svg: ^2.0.7\r\n  sqflite: ^2.2.8+1\r\n  path: ^1.8.3\r\n  pdf: ^3.10.3\r\n  path_provider: ^2.0.15\r\n  open_file: ^3.2.1\r\n  icon_badge: ^1.0.0\r\n  animated_bottom_navigation_bar: ^1.3.3\r\n  percent_indicator: ^4.2.2\r\n  flutter_speed_dial: ^7.0.0\r\n  font_awesome_flutter: ^10.1.0\r\n  animated_theme_switcher: ^2.0.8\r\n  glassmorphism: ^3.0.0\r\n  animations: ^2.0.3\r\n  flutter_animate: ^4.1.1+1\r\n  audioplayers: ^6.1.0\r\n  firebase_core: ^3.5.0\r\n  firebase_auth: ^5.3.0\r\n  cloud_firestore: ^5.4.1\r\n  hive: ^2.2.3\r\n  hive_flutter: ^1.1.0\r\n  build_runner: ^2.3.3\r\n  hive_generator: ^2.0.0\r\n  crypto: any\r\n  firebase_admin: ^0.3.0\r\n  firebase_dart: ^1.0.11\r\n  http: ^1.2.2\r\n  firebase_auth_rest: ^2.0.6\r\n\r\n\r\n\r\n\r\ndev_dependencies:\r\n  flutter_test:\r\n    sdk: flutter\r\n\r\nflutter:\r\n  uses-material-design: true\r\n  fonts:\r\n    - family: Poppins\r\n      fonts:\r\n        - asset: assets/fonts/Poppins-Regular.ttf\r\n        - asset: assets/fonts/Poppins-Bold.ttf\r\n          weight: 700\r\n  assets:\r\n    - assets/ald_system_diagram.png\r\n    - assets/initial_components.json"
+        }
+    ]
+}

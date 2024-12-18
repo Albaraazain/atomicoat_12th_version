@@ -49,5 +49,13 @@ void handleNavigation(BuildContext context, NavigationItem item) {
     case NavigationItem.overview:
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => MaintenanceHomeScreen()));
       break;
+    case NavigationItem.schedule:
+      // TODO: Implement navigation for schedule
+      break;
+    case NavigationItem.reports:
+      // TODO: Implement navigation for reports
+      break;
+    default:
+      break;
   }
 }

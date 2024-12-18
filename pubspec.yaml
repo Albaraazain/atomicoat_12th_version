@@ -6,7 +6,7 @@ publish_to: 'none'
 version: 1.0.0+2
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
   flutter:
@@ -50,6 +50,7 @@ dependencies:
   firebase_dart: ^1.0.11
   http: ^1.2.2
   firebase_auth_rest: ^2.0.6
+  flutter_bloc: ^8.1.6
 
 
 

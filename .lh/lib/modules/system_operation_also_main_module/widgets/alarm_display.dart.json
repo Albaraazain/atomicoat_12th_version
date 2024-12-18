@@ -1,0 +1,18 @@
+{
+    "sourceFile": "lib/modules/system_operation_also_main_module/widgets/alarm_display.dart",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1734534436944,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1734534436944,
+            "name": "Commit-0",
+            "content": "// lib/modules/system_operation_also_main_module/widgets/alarm_display.dart\r\n\r\nimport 'package:flutter/material.dart';\r\nimport 'package:provider/provider.dart';\r\nimport '../../../features/alarm/models/alarm.dart';\r\nimport '../providers/system_state_provider.dart';\r\n\r\nclass AlarmDisplay extends StatelessWidget {\r\n  @override\r\n  Widget build(BuildContext context) {\r\n    return Consumer<SystemStateProvider>(\r\n      builder: (context, systemStateProvider, child) {\r\n        return Column(\r\n          children: [\r\n            Padding(\r\n              padding: EdgeInsets.all(16),\r\n              child: Text(\r\n                'Active Alarms',\r\n                style: Theme.of(context).textTheme.titleLarge,\r\n              ),\r\n            ),\r\n            Expanded(\r\n              child: systemStateProvider.activeAlarms.isEmpty\r\n                  ? Center(child: Text('No active alarms'))\r\n                  : ListView.builder(\r\n                itemCount: systemStateProvider.activeAlarms.length,\r\n                itemBuilder: (context, index) {\r\n                  final alarm = systemStateProvider.activeAlarms[index];\r\n                  return Card(\r\n                    child: ListTile(\r\n                      leading: _getAlarmIcon(alarm.severity),\r\n                      title: Text(alarm.message),\r\n                      subtitle: Text(\r\n                        '${alarm.timestamp.toString().split('.')[0]}',\r\n                      ),\r\n                      trailing: alarm.acknowledged\r\n                          ? Icon(Icons.check, color: Colors.green)\r\n                          : TextButton(\r\n                        child: Text('Acknowledge'),\r\n                        onPressed: () {\r\n                          systemStateProvider.acknowledgeAlarm(alarm.id);\r\n                        },\r\n                      ),\r\n                    ),\r\n                  );\r\n                },\r\n              ),\r\n            ),\r\n          ],\r\n        );\r\n      },\r\n    );\r\n  }\r\n\r\n  Widget _getAlarmIcon(AlarmSeverity severity) {\r\n    switch (severity) {\r\n      case AlarmSeverity.info:\r\n        return Icon(Icons.info, color: Colors.blue);\r\n      case AlarmSeverity.warning:\r\n        return Icon(Icons.warning, color: Colors.orange);\r\n      case AlarmSeverity.critical:\r\n        return Icon(Icons.error, color: Colors.red);\r\n    }\r\n  }\r\n}"
+        }
+    ]
+}

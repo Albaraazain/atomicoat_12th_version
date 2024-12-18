@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../modules/system_operation_also_main_module/models/alarm.dart';
-import 'base_repository.dart';
+import '../models/alarm.dart';
+import '../../../repositories/base_repository.dart';
 
 class AlarmRepository extends BaseRepository<Alarm> {
   AlarmRepository() : super('alarms');

@@ -23,3 +23,12 @@ enum ValidationIssueType {
   safetyViolation,
   logicError
 }
+
+/// Validation severity
+enum ValidationSeverity {
+  info,
+  warning,
+  error,
+  critical
+}
+

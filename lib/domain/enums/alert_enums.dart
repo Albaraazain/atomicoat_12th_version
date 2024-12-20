@@ -29,12 +29,6 @@ enum AlertSeverity {
   }
 }
 
-enum DeviationSeverity {
-  info,
-  warning,
-  critical
-}
-
 enum AlertLevel {
   info,
   warning,

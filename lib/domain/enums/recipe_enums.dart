@@ -26,3 +26,35 @@ enum RecipeExportFormat {
   pdf
 }
 
+/// Version status
+enum VersionStatus {
+  draft,
+  testing,
+  stable,
+  deprecated,
+  archived
+}
+
+/// Optimization status
+enum OptimizationStatus {
+  proposed,
+  testing,
+  validated,
+  rejected
+}
+/// Execution status
+enum ExecutionStatus {
+  completed,
+  failed,
+  aborted,
+  partialSuccess
+}
+
+/// Deviation severity
+enum DeviationSeverity {
+  minor,
+  moderate,
+  major,
+  critical
+}
+
